@@ -83,6 +83,11 @@ Agar aapne `rm` se file delete kar di, toh disk space tab tak free nahi hogi jab
 
 **Q5: `.gz` files kya hoti hain /var/log mein?**
 * **Answer:** Ye purani logs hain jinhe `logrotate` ne compress kar diya hai taaki wo disk space kam lein. Inhe `zcat` ya `zless` se padha ja sakta hai.
+# 1. Find
+sudo find /var/log -type f -size +100M -exec ls -lh {} \;
 
+# 2. Delete (safe)
+sudo find /var/log -type f -size +100M -exec rm -i {} \;
 ---
 *Keep Logging, Keep Troubleshooting! 🚀*
+
