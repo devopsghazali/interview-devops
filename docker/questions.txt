@@ -1,0 +1,203 @@
+⭐⭐ LEVEL 1 (Basic but MUST-KNOW)
+⭐ 1. Container start hota hai phir turant band ho jata hai
+
+👉 Problem:
+
+docker run myapp
+
+→ container exit
+
+👉 Root cause:
+
+main process exit ho gaya
+CMD galat
+
+👉 Debug:
+
+docker logs <id>
+
+👉 Fix:
+
+ensure long-running process (server, loop)
+⭐ 2. Port access nahi ho raha
+
+👉 Problem:
+
+container chal raha hai
+browser se access nahi
+
+👉 Root cause:
+
+-p use nahi kiya
+wrong port mapping
+
+👉 Fix:
+
+docker run -p 3000:3000 myapp
+⭐ 3. File changes reflect nahi ho rahe
+
+👉 Problem:
+
+code change kiya but container mein reflect nahi
+
+👉 Root cause:
+
+image static hai
+
+👉 Fix:
+
+-v $(pwd):/app
+⭐ 4. Disk full ho gaya Docker ki wajah se
+
+👉 Problem:
+
+No space left on device
+
+👉 Root cause:
+
+unused images, containers
+
+👉 Fix:
+
+docker system prune -a
+⭐ 5. Permission denied inside container
+
+👉 Problem:
+
+Permission denied
+
+👉 Root cause:
+
+wrong user
+volume permissions
+
+👉 Fix:
+
+use non-root properly
+chown/chmod
+⭐⭐⭐ LEVEL 2 (Intermediate Real Issues)
+⭐⭐ 6. Container aapas mein connect nahi ho rahe
+
+👉 Root cause:
+
+different networks
+
+👉 Fix:
+
+docker network create mynet
+⭐⭐ 7. Container name resolve nahi ho raha
+
+👉 Problem:
+
+ping db ❌
+
+👉 Root cause:
+
+default bridge
+
+👉 Fix:
+
+custom network
+⭐⭐ 8. Environment variable missing
+
+👉 Problem:
+
+app crash due to missing env
+
+👉 Fix:
+
+docker run -e KEY=value
+⭐⭐ 9. Build slow ho raha hai
+
+👉 Root cause:
+
+Dockerfile cache misuse
+
+👉 Fix:
+
+optimize layers
+⭐⭐ 10. Container restart loop
+
+👉 Problem:
+
+Restarting (1)...
+
+👉 Root cause:
+
+crash ho raha hai repeatedly
+
+👉 Debug:
+
+docker logs
+⭐⭐⭐⭐ LEVEL 3 (Advanced / Production)
+⭐⭐⭐ 11. Data loss after container delete 😱
+
+👉 Root cause:
+
+no volume
+
+👉 Fix:
+
+docker volume create mydata
+⭐⭐⭐ 12. Secrets leak ho rahe hain
+
+👉 Problem:
+
+passwords image mein
+
+👉 Fix:
+
+env vars / secret manager
+⭐⭐⭐ 13. Multiple containers ke beech race condition
+
+👉 Problem:
+
+app start before DB
+
+👉 Fix:
+
+healthcheck / wait-for-it script
+⭐⭐⭐ 14. High CPU usage / resource hogging
+
+👉 Problem:
+
+container sab resource le raha
+
+👉 Fix:
+
+--cpus=1 --memory=512m
+⭐⭐⭐ 15. Image size bahut bada ho gaya
+
+👉 Problem:
+
+slow deploy
+
+👉 Root cause:
+
+unnecessary files
+
+👉 Fix:
+
+multi-stage build
+alpine base image
+🔥 BONUS (INTERVIEW KILLER QUESTIONS)
+💥 “Container aur VM mein real difference kya hai internally?”
+
+👉 Answer:
+
+container → namespaces + cgroups
+VM → hypervisor + full OS
+💥 “Docker networking ka default behavior kya hai?”
+
+👉 Answer:
+
+bridge network
+NAT
+port mapping
+💥 “Container crash ho raha hai kaise debug karoge?”
+
+👉 Flow:
+
+docker logs
+docker inspect
+docker exec
